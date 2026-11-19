@@ -260,13 +260,30 @@ function openPoster(pi){
   drawPoster(pi, v);
 }
 function closePoster(){ document.getElementById('posterModal').classList.remove('open'); }
+function posterImgUrl(fid){
+  // lh3.googleusercontent.com itu link Drive juga, tapi ngasih izin CORS
+  // jadi bisa digambar ke canvas poster. thumb() yang lama di-block Drive.
+  return 'https://lh3.googleusercontent.com/d/' + fid + '=w1000';
+}
 async function loadImg(url){
-  // Coba fetch blob dulu (biar canvas tidak tainted), fallback ke Image langsung
-  try{
-    const r = await fetch(url, {mode:'cors'});
-    if(r.ok){ const b = await r.blob(); const obj = URL.createObjectURL(b); return await loadImgEl(obj); }
-  }catch(e){}
-  return await loadImgEl(url);
+  // url di sini sudah berupa fid atau full url - normalisasi ke lh3
+  let fid = url;
+  const m = String(url).match(/id=([^&]+)/);
+  if(m) fid = m[1];
+  if(fid && !String(fid).startsWith('http')) fid = posterImgUrl(fid);
+  else if(String(url).includes('drive.google.com/thumbnail')) fid = posterImgUrl(fid);
+  const candidates = [fid];
+  // Fallback ke link lama kalau lh3 gagal
+  if(String(url).includes('drive.google.com')) candidates.push(url);
+  candidates.push('https://drive.google.com/uc?export=view&id=' + (m?m[1]:url));
+  for(const c of candidates){
+    try{
+      const r = await fetch(c, {mode:'cors'});
+      if(r.ok){ const b = await r.blob(); const obj = URL.createObjectURL(b); const im = await loadImgEl(obj); return im; }
+    }catch(e){}
+    try{ const im = await loadImgEl(c); return im; }catch(e){}
+  }
+  throw new Error('gagal load foto');
 }
 function loadImgEl(src){
   return new Promise((res, rej)=>{
@@ -303,22 +320,22 @@ async function drawPoster(pi, vname){
   try{
     if(isBundle){
       const fid2 = p.variants[vi][2] || p.variants[vi][1];
-      const [im1, im2] = await Promise.all([loadImg(thumb(fid1)), loadImg(thumb(fid2))]);
+      const [im1, im2] = await Promise.all([loadImg(fid1), loadImg(fid2)]);
       drawCover(ctx, im1, photoX, photoY, photoW, photoH);
       drawCover(ctx, im2, photoX+photoW+20, photoY, photoW, photoH);
       // Plus badge
       ctx.fillStyle = '#fff'; ctx.beginPath(); ctx.arc(W/2, photoY+photoH/2, 38, 0, Math.PI*2); ctx.fill();
       ctx.fillStyle = '#4A3A2E'; ctx.font = '900 44px Arial'; ctx.fillText('+', W/2, photoY+photoH/2+15);
     } else {
-      const im = await loadImg(thumb(fid1));
+      const im = await loadImg(fid1);
       drawCover(ctx, im, photoX, photoY, photoW, photoH);
     }
   }catch(e){
     // Jika foto gagal (Drive block CORS), tampilkan placeholder + tetap bisa download poster dengan teks
     ctx.fillStyle = '#EDE6DA'; ctx.fillRect(photoX, photoY, isBundle? (photoW*2+20):photoW, photoH);
     ctx.fillStyle = '#888'; ctx.font = '400 26px system-ui, Arial';
-    ctx.fillText('Foto tidak bisa dimuat dari Drive,', W/2, photoY+photoH/2-10);
-    ctx.fillText('coba download ulang / cek izin Drive.', W/2, photoY+photoH/2+25);
+    ctx.fillText('Foto masih memuat, coba tutup & buka lagi...', W/2, photoY+photoH/2-10);
+    ctx.fillText('Kalau tetap kosong, cek sinyal / izin Drive.', W/2, photoY+photoH/2+25);
   }
   // Info area
   ctx.textAlign = 'center';
