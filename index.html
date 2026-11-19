@@ -1,0 +1,229 @@
+<!DOCTYPE html><html lang="id"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>Amaya Fashion - Katalog</title>
+<style>
+*{box-sizing:border-box}body{margin:0;font-family:system-ui,-apple-system,Segoe UI,Roboto,Arial;background:#FAF6F1;color:#222}
+header{position:sticky;top:0;z-index:20;background:#FFFDF9;border-bottom:1px solid #EDE6DA;padding:12px 14px}
+.top{max-width:720px;margin:0 auto}h1{margin:0;font-size:24px;color:#4A3A2E}h1 span{color:#8B6F4E}.sub{color:#666;font-size:13px;margin:4px 0 10px}
+.search{width:100%;padding:12px;border:1px solid #ddd;border-radius:999px;font-size:15px}
+.filters{display:flex;gap:8px;overflow:auto;padding:10px 0 2px}.filters button{white-space:nowrap;border:1px solid #ddd;background:#fff;padding:8px 14px;border-radius:999px;cursor:pointer}.filters button.active{background:#4A3A2E;color:#fff}
+.ongkirbar{max-width:720px;margin:14px auto;background:#4A3A2E;color:#fff;border-radius:14px;padding:14px}.ongkirbar b{color:#EDE0C8}.btn-ongkir{display:block;text-align:center;background:#A98467;color:#fff;padding:12px;border-radius:10px;text-decoration:none;font-weight:700;margin-top:10px}
+main{max-width:720px;margin:0 auto;padding:0 14px 40px}
+.card{background:#FFFDF9;border:1px solid #EDE6DA;border-radius:18px;overflow:hidden;margin:16px 0;box-shadow:0 4px 18px rgba(0,0,0,.05)}
+.imgwrap{position:relative;background:#f3f3f3;aspect-ratio:1/1;overflow:hidden}.imgwrap img{width:100%;height:100%;object-fit:cover;display:block}.imgwrap.bundle{display:flex}.imgwrap.bundle img{width:50%!important;height:100%;object-fit:cover}.imgwrap.bundle .plus{position:absolute;left:50%;top:50%;transform:translate(-50%,-50%);background:#fff;border-radius:50%;width:34px;height:34px;display:flex;align-items:center;justify-content:center;font-weight:900;z-index:3;box-shadow:0 2px 8px rgba(0,0,0,.25);font-size:18px}
+.sticker{position:absolute;top:12px;left:12px;background:#B85C4A;color:#fff;font-weight:800;font-size:12px;padding:6px 10px;border-radius:999px;z-index:2}
+.body{padding:16px}.cat{font-size:12px;letter-spacing:.08em;text-transform:uppercase;color:#888}h3{margin:4px 0 6px;font-size:21px}.price{font-size:22px;font-weight:800}.old{color:#999;text-decoration:line-through;font-size:15px;font-weight:400;margin-left:6px}.desc{font-size:14px;color:#555;margin:8px 0 0}
+.chips{display:flex;flex-wrap:wrap;gap:8px;margin:10px 0}.chip{padding:8px 12px;border:1px solid #ddd;background:#fff;border-radius:999px;cursor:pointer}.chip.active{background:#4A3A2E;color:#fff;border-color:#4A3A2E}
+.ongkir{font-size:13px;color:#555}.wa{display:block;text-align:center;background:#5F8A5E;color:#fff;padding:13px;border-radius:12px;text-decoration:none;font-weight:700;margin-top:12px}
+.share{display:block;width:100%;text-align:center;background:#fff;border:2px solid #4A3A2E;color:#4A3A2E;padding:12px;border-radius:12px;font-weight:700;margin-top:10px;cursor:pointer;font-size:15px}.share:active{background:#F3EBE0}.share-note{text-align:center;font-size:12px;color:#888;margin:6px 0 0;line-height:1.4}.share-note b{color:#5F8A5E}
+section{background:#FFFDF9;border:1px solid #EDE6DA;border-radius:16px;padding:16px;margin:16px 0}h2{margin:0 0 8px}ol{margin:0;padding-left:20px;line-height:1.8}
+.kenapa{display:grid;grid-template-columns:1fr 1fr;gap:10px}.kenapa div{background:#F3EBE0;border-radius:12px;padding:12px;font-size:14px}
+footer{text-align:center;color:#888;font-size:12px;padding:20px}
+/* ADMIN */
+#adminPage{display:none;max-width:720px;margin:0 auto;padding:14px}
+.admin-head{background:#4A3A2E;color:#fff;border-radius:14px;padding:16px}.admin-head h2{margin:0}.admin-head p{margin:4px 0 0;opacity:.85;font-size:13px}
+.admin-tabs{display:flex;gap:8px;margin:14px 0}.admin-tabs button{flex:1;padding:12px;border:1px solid #ddd;background:#fff;border-radius:12px;cursor:pointer;font-weight:700}.admin-tabs button.active{background:#4A3A2E;color:#fff}
+.admin-card{background:#fff;border:1px solid #EDE6DA;border-radius:14px;padding:14px;margin:10px 0}
+.admin-card h4{margin:0 0 8px}.admin-row{display:flex;gap:8px;flex-wrap:wrap}.admin-row input,.admin-row select,.admin-row textarea{flex:1;min-width:120px;padding:10px;border:1px solid #ddd;border-radius:10px;font-size:14px}.admin-row textarea{flex-basis:100%}
+.btn{padding:11px 14px;border-radius:10px;border:0;cursor:pointer;font-weight:700}.btn-dark{background:#4A3A2E;color:#fff}.btn-green{background:#5F8A5E;color:#fff}.btn-red{background:#B85C4A;color:#fff}.btn-ghost{background:#fff;border:1px solid #ddd}
+.badge{display:inline-block;padding:4px 10px;border-radius:999px;font-size:12px;font-weight:800;color:#fff}.b-Baru{background:#B85C4A}.b-Diproses{background:#D9A441}.b-Dikirim{background:#4A90D9}.b-Selesai{background:#5F8A5E}.b-Dibatalkan{background:#888}
+.stock-low{color:#B85C4A;font-weight:800}.stock-mid{color:#B8860B;font-weight:800}.stock-ok{color:#5F8A5E;font-weight:800}
+table{width:100%;border-collapse:collapse;font-size:13px}th,td{padding:8px;border-bottom:1px solid #eee;text-align:left}
+.rekap{display:grid;grid-template-columns:1fr 1fr 1fr;gap:8px}.rekap div{background:#F3EBE0;border-radius:12px;padding:12px;text-align:center}.rekap b{font-size:18px;display:block}
+</style></head><body>
+<div id="katalogPage">
+<header><div class="top"><h1>Amaya <span>Fashion</span></h1><p class="sub">Katalog • Order via WA 0822-2443-7059 • Barang Bagus & Berkualitas • 28 Produk + 3 Bundle</p>
+<div style="display:flex;gap:8px;align-items:center"><input class="search" id="search" placeholder="Cari produk... contoh: Mukena, Gamis, Set Amaya" oninput="filter()" onkeydown="if(event.key==='Enter'){event.preventDefault();checkAdmin();}"><button id="btnCari" onclick="checkAdmin()" style="flex-shrink:0;background:#4A3A2E;color:#fff;border:0;padding:12px 18px;border-radius:999px;font-weight:800;cursor:pointer;font-size:15px">Cari</button></div>
+<div class="filters" id="filters"><button class="active" onclick="setCat('Semua',this)">Semua</button><button onclick="setCat('Bundle Promo',this)">Bundle Promo</button><button onclick="setCat('Kemko Pria',this)">Kemko Pria</button><button onclick="setCat('Jaket Pria',this)">Jaket Pria</button><button onclick="setCat('Mukena',this)">Mukena</button><button onclick="setCat('Gamis Wanita',this)">Gamis Wanita</button><button onclick="setCat('Blouse Dewasa',this)">Blouse Dewasa</button><button onclick="setCat('Celana Wanita',this)">Celana Wanita</button><button onclick="setCat('Setelan Wanita',this)">Setelan Wanita</button><button onclick="setCat('Busana Anak',this)">Busana Anak</button></div></div></header>
+<main><div class="ongkirbar"><b>Info Ongkir:</b> Pulau Jawa <b>GRATIS ONGKIR</b>. Luar Jawa cek ongkir dulu, chat WA untuk konfirmasi.<a class="btn-ongkir" href="https://cek-ongkir.com/" target="_blank" rel="noopener">Cek Ongkir Luar Jawa → cek-ongkir.com</a><div style="font-size:12px;margin-top:8px;opacity:.8">Buka link, cek ongkir, screenshot hasilnya ke WA Amaya.</div></div>
+<section><h2>Cara Order</h2><ol><li>Pilih produk & warna</li><li>Klik Order via WA</li><li>Isi Nama, Alamat, No HP</li><li>Transfer & pesanan diproses</li></ol></section>
+<section><h2>Kenapa Amaya?</h2><div class="kenapa"><div>✨ Barang Bagus / Berkualitas</div><div>🧵 Bahan Nyaman Dipakai</div><div>✂️ Jahitan Rapi</div><div>🚀 Pengiriman Cepat & Aman</div><div>💬 Respon WA Cepat</div><div>🎁 Promo Kemko & Bundle Terbatas</div></div></section>
+<div id="list"></div>
+<div class="ongkirbar" style="text-align:center">Masih bingung ongkir luar Jawa?<a class="btn-ongkir" href="https://cek-ongkir.com/" target="_blank" rel="noopener">Cek Ongkir di cek-ongkir.com</a></div>
+<section><h2>Order & Tanya-tanya</h2><p>WA: 0822-2443-7059<br>Katalog ini order via WA saja.</p><a class="wa" href="https://wa.me/6282224437059?text=Halo%20Amaya%20Fashion%2C%20mau%20tanya%20produk" target="_blank">Chat WA Amaya Fashion</a></section></main><footer>© 2026 Amaya Fashion • Katalog</footer>
+</div>
+
+<div id="adminPage">
+<div class="admin-head"><h2>Dashboard Admin - Amaya Fashion</h2><p>Mode Admin • Kode AMAYA123 • Data tersimpan di perangkat ini</p><div style="margin-top:12px;display:flex;gap:8px"><button class="btn btn-ghost" onclick="keluarAdmin()" style="background:#fff;color:#333">← Keluar Admin</button><button class="btn" style="background:#A98467;color:#fff" onclick="kunciAdmin()">🔒 Kunci</button></div></div>
+<div class="admin-tabs"><button id="tabBtnProduk" class="active" onclick="showTab('Produk')">Produk</button><button id="tabBtnOrder" onclick="showTab('Order')">Order</button><button id="tabBtnStok" onclick="showTab('Stok')">Stok & Rekap</button></div>
+<div id="tabProduk"></div>
+<div id="tabOrder" style="display:none"></div>
+<div id="tabStok" style="display:none"></div>
+</div>
+
+<script>
+const DEFAULT_PRODUCTS = [{"name": "Set Amaya Vally", "cat": "Bundle Promo", "price": 289000, "old": 304200, "modal": 234000, "promo": true, "is_bundle": true, "desc": "1 Set = Vally Pants + Malova Blouse Dewasa. Pilih warna Pants & Blouse di WA.", "variants": [["Grey + Cream", "1hlmTFEozvs3hcy9x6fIYA62XfB84Ge9J", "1KARb0HrT3ZpyJW5A8Ps2Jt_bIiQV9Akl"], ["Brown + Brown", "1sr-35VZKEUFy4mUJCpBpD4fGfRnzYfv4", "1fSjk1JmBZoWMu6h2dps9ANwqd360Ysdm"], ["Light Grey + Black", "1488FTKVtjJFJdPeJtmMZPvgimKxt34TD", "1TEd8_KGCUEKkMH6PnWbbc2FKnfHs-idF"]]}, {"name": "Set Ibu & Anak", "cat": "Bundle Promo", "price": 265000, "old": 278200, "modal": 214000, "promo": true, "is_bundle": true, "desc": "1 Set = Aura Pants (Ibu) + Pramudita Blouse (Anak).", "variants": [["Dark Grey + Beige", "1rE1xO4iME9OMgY7oj6KG6TJb1FFxkcCr", "1a9ecKT_CSW7J6c43ZKU8kK18rmXJU0OP"], ["Brown + Beige", "1e4stEkohZxEqzHKnMCkoJ6aBiXviygZT", "1a9ecKT_CSW7J6c43ZKU8kK18rmXJU0OP"]]}, {"name": "Bundle Lebaran", "cat": "Bundle Promo", "price": 340000, "old": 356200, "modal": 274000, "promo": true, "is_bundle": true, "desc": "1 Paket = Gamis Nisha + Mukena Hindun. Siap Lebaran.", "variants": [["Nisha Burgundy + Hindun Black", "1NP41bzz0MFp6Oz5VPtNUPO5aQ6tUKH97", "1j7CMWRlJk4Ruh98KSlXSfLCWwZUg5UnL"], ["Nisha White + Hindun White", "1LR4SMx1XYLuOD6C9OpmX059mGfKKXde1", "1YzSm8WJRiFESYgtYp8gTAvpNvRAtuG-k"]]}, {"name": "Kemko Zubair", "cat": "Kemko Pria", "price": 155000, "old": 175500, "modal": 135000, "promo": true, "variants": [["Mahogany", "1OTnOKcqiTATzRTUS9b3W-o-s0pG0caTc"], ["Black", "1kadvE15xg4PgVIw_mJUP5XhQ7zZ-W5u8"], ["Cream", "10J8S1bmXML1Cvfm9JZDVr1O-oLTqo2xk"], ["Grey", "18RcZMEHjg6YgH4PwytZQGSBm9OMAxZN9"], ["Marun", "1NGCRoavkj7iVD5YBoO0t192qwuYZli2o"], ["Navy", "1_X2fVUSM6pLmQAGat1thdhcdqVJdDfzH"], ["White", "1XUmt_wrzQHADFzJh4HYw1iQKmTFd3x7n"]]}, {"name": "Kemko Ikhlas", "cat": "Kemko Pria", "price": 155000, "old": 175500, "modal": 135000, "promo": true, "variants": [["Grey", "1aFYpPP78qfgxEg6Juo-zmNkcvSKBl2Rt"], ["Hitam", "1xQfzNOZplCnsXCv7T6Pl5-Yww-DHKhHk"], ["Olive", "1o3mNp7Ah6y42tk_kTZ7YocHpdWYxGdYn"], ["Telurasin", "1qP_Y8AS4MIO4etw-EhctUDEo-iIhVXbM"]]}, {"name": "Aura Pants", "cat": "Celana Wanita", "price": 141700, "old": 0, "modal": 109000, "variants": [["Brown", "1e4stEkohZxEqzHKnMCkoJ6aBiXviygZT"], ["Dark Grey", "1rE1xO4iME9OMgY7oj6KG6TJb1FFxkcCr"], ["Millo", "17NuaB4e2F_f8VJbMAO3ltXEOOo70IwUd"]]}, {"name": "Vally Pants", "cat": "Celana Wanita", "price": 141700, "old": 0, "modal": 109000, "variants": [["Brown", "1sr-35VZKEUFy4mUJCpBpD4fGfRnzYfv4"], ["Grey", "1hlmTFEozvs3hcy9x6fIYA62XfB84Ge9J"], ["Light Grey", "1488FTKVtjJFJdPeJtmMZPvgimKxt34TD"]]}, {"name": "Malova Blouse", "cat": "Blouse Dewasa", "price": 162500, "old": 0, "modal": 125000, "variants": [["Brown", "1fSjk1JmBZoWMu6h2dps9ANwqd360Ysdm"], ["Milo", "1diD_zwZ3AQuEmvfKBD5txotPz8Gt_3le"], ["Cream", "1KARb0HrT3ZpyJW5A8Ps2Jt_bIiQV9Akl"], ["Black", "1TEd8_KGCUEKkMH6PnWbbc2FKnfHs-idF"]]}, {"name": "Kimora Set", "cat": "Setelan Wanita", "price": 219700, "old": 0, "modal": 169000, "variants": [["Black", "1o-1Xp3A6Z9pO89mEFcCBh14HjtRrO0_C"], ["White", "1EEg2zf9SPktx2I4DyuwqrfXvbGGEpsYZ"]]}, {"name": "Zelin Set", "cat": "Setelan Wanita", "price": 219700, "old": 0, "modal": 169000, "variants": [["Black", "1y_fchIm_j7U2ZJc_B1WmsoXJUuE_9nIM"], ["Brown", "1EdUh2yFwjQ2ADqb13OlODaJINisxZxZ_"], ["Red", "1jfJeo5dNO24nKUKMuCtL8_QN52V3omqe"]]}, {"name": "Amina Set", "cat": "Busana Anak", "price": 201500, "old": 0, "modal": 155000, "variants": [["Brown", "1t-zTOvL8u_L2hvOdIlki-RJan5E9U5FF"], ["Cream", "1w91UlaH-hbE6_pufWKPpqSkogLQXe-z_"], ["Mauve", "1hL89Yesak6yYu-YtTqdXxOjFf8YLnHVt"], ["Mocca", "1ICG6wVxrMfJiOSZLL7RTZkpoRgKWbkDE"]]}, {"name": "Dhira Blouse", "cat": "Busana Anak", "price": 136500, "old": 0, "modal": 105000, "variants": [["Pink1", "1BC36iZg-Z3YgJv7EFhGQvYP1Ab48rpPc"], ["Pink2", "1yUEYrxufQrTLx9ZrcrskulKnVkfvvFkK"], ["Pink3", "1sA_I5gm-V6RfeAcUxsKrX2Ag0Y1vLOAL"], ["Sage", "1jTabuOxP5_N55gYjzGNCeEcATY7xEBt5"], ["Yellow", "19hKPYK-8q3dtUJL4i5ZBiBHaPCdXl2Ow"]]}, {"name": "Pramudita Blouse", "cat": "Busana Anak", "price": 136500, "old": 0, "modal": 105000, "variants": [["Beige", "1a9ecKT_CSW7J6c43ZKU8kK18rmXJU0OP"], ["Lilac", "1AIVogYWZ8nEa5wvCPlmgQKos6BV9QKal"], ["Pink", "1iwTxSr-E1w8VT5rTcFHVkMvqG5LYaQCY"], ["Sage", "188NcC3PtK2CxeU0n2Gzia7rMI4YjXDd3"], ["Yellow", "1FDBtrTNNJknbZg3bJeQ8F30oklq45Onj"]]}, {"name": "Basagita Blouse", "cat": "Busana Anak", "price": 136500, "old": 0, "modal": 105000, "variants": [["Green", "1lHCcEQh3v7u2Y8PaVIqzrcy0b5_XHF30"], ["Grey", "18p1hjp4-Vi-0u0C6h4_0x0vWfatiFkdR"], ["Lilac", "1G9s634DDlmON-y3jxMYAbjb9CAMC9THx"], ["Peach", "13WrLH-EaHjNkzRVoqFpsU7makIFUIdW1"], ["Yellow", "1Dkp80HvXG0N_Lx5BvM4YMrTE5-um-XCI"]]}, {"name": "Zendaya Set", "cat": "Setelan Wanita", "price": 180700, "old": 0, "modal": 139000, "variants": [["Black", "1UUG-bS1DTxt20gO2RI3zwuNVTbJ_1ob8"], ["Brown", "16FOhDdR7tDO3KfdGrIwcAKWlt3D250gy"], ["Mint", "14ndkN9DUHfXBSQnmE3fAcLgYHjN5xfnr"]]}, {"name": "Mukena Hindun", "cat": "Mukena", "price": 162500, "old": 0, "modal": 125000, "variants": [["Light Blue", "1oypdRwZvoFye2NksQWTvhDKeWMXTAruK"], ["Purple", "1O7r5uyQ8Tnabqq7-i34lIOgsHtzeo5JH"], ["Telur Asin", "1w3GNrhlF8v8FIlvPZZeQ78r3fTiYg_nQ"], ["Black", "1j7CMWRlJk4Ruh98KSlXSfLCWwZUg5UnL"], ["Navy", "1UEVE2ql0B7YigOicF2g2ZtaXjOmZEs6B"], ["Tosca", "1i1sXfsIaeSq9_ejqXpi1xgyMI19s3Upj"], ["Blue", "1Cd-tj0UUCSpIwJBQwDfc0Hlx-R7CIHL5"], ["Pink", "1GtXrsG0inJBbUmJSnIx7SzQ0EshElMsn"], ["White", "1YzSm8WJRiFESYgtYp8gTAvpNvRAtuG-k"]]}, {"name": "Mukena Sarah", "cat": "Mukena", "price": 266500, "old": 0, "modal": 205000, "variants": [["Grey", "1OjbPNdSU_4oE22BGgR_oCymm7kaN6Uxu"], ["Avocado", "1PwciI5boF2CEsBydkWltyv-fHSVZtU2r"], ["White", "1Ztz5U0Mp2pBuqnaWDGLFw3ZDfwvCQqut"], ["Black", "1leaXEilBIvLIh98WQQ01u2dxCj_WfB6w"], ["Caramel", "1su9vF4XNT4gtG4sYCQsBXlJBm0Vuh4a1"], ["Pink", "1GMhXy04809N11Z2Y7mMh2Am4aDNdD1O5"]]}, {"name": "Mukena Naima", "cat": "Mukena", "price": 227500, "old": 0, "modal": 175000, "variants": [["Krem", "1tMY1mh3lqrEgK_wvX_MvaGXJ7BnVKjK9"], ["Black", "1ziBO-4DGSPgcuSFfyAH0VC0AVRRr5Rzy"], ["Light Grey", "1ZF00H4n81N4DkMUepS_ttjbyDjYUNJEY"], ["Light Brown", "1Crii_yZbqa-7YblHQT8F4wDtveRVrMIb"]]}, {"name": "Gamis Haliza", "cat": "Gamis Wanita", "price": 227500, "old": 0, "modal": 175000, "variants": [["Black X", "12Au8gBMOFjNB1JKkGBdZERiiWasTPN0C"], ["White X", "1mS1eKSbey3avxboSE8WC1aeKhdMoxqee"], ["Taro X", "1HnyFESaKZNHo410-0ykuGn09JA__r_0_"], ["Milo J", "1FDpsYLh5ThMJI1x3LYyBU1IxGFEY9-g-"], ["Grey J", "1slmNp4Zyg2IzFeXyY304_hBFrqtZTLRc"], ["Stone J", "1IXF0D7Xl-D7JwL52DGhNMHD9XX8yPf99"], ["Mauve J", "1_4uypyysHKDX655GiyluRqdWyklq6Erq"], ["Maroon J", "138il56wyqc6tP5E7xBEU5-C69IJdsnaG"], ["Black J", "1m-YVoxt871LgxARXQ-8mUVjvwtQvz6ER"]]}, {"name": "Gamis Nisha", "cat": "Gamis Wanita", "price": 193700, "old": 0, "modal": 149000, "variants": [["Pure White", "1LR4SMx1XYLuOD6C9OpmX059mGfKKXde1"], ["Bronze Brown", "1JvjGDuAjlyAw4TvVbWKR8Tz3-R7tYT7n"], ["Burgundy", "1NP41bzz0MFp6Oz5VPtNUPO5aQ6tUKH97"]]}, {"name": "Gamis Rumaysha", "cat": "Gamis Wanita", "price": 227500, "old": 0, "modal": 175000, "variants": [["Brown Sugar", "10xQZRm0OM1iUjDpyI4qD8UsKuH_QiOXl"], ["Mahagony", "1opYI1mJubb1Qchh3YZsl6348-QxhgDzJ"], ["White", "1ndhA32j4qfARZNo5-sj4iYpY6XgMfcBE"], ["Black", "1-cKtBWHsNPLFpNESdwNGovwoNxJsthMB"], ["Maciato", "1GWC4I8rTEkDuzArpczxK1QldVot44m8P"]]}, {"name": "Blouse Hajho", "cat": "Blouse Dewasa", "price": 162500, "old": 0, "modal": 125000, "variants": [["Green", "1QmEbSEQAf2O5FdDBX7All3swO6eiZx0H"], ["Cream", "1_TDwfwCQUj3CXA2Hw3lNeR-IE18n-bQw"], ["Brown", "1IkXZdf0FM9UrTP4VdhnmoDbXJj3M-zgu"], ["Black", "1Bfh51IOpyhASIGfxn_KHWGmrwOkpdh7k"]]}, {"name": "Blouse Wieke", "cat": "Blouse Dewasa", "price": 180700, "old": 0, "modal": 139000, "variants": [["Brown", "1y7Fr04gYmvC0188qh2Aa1Swqb8NhHoFi"], ["White", "1lOOvjdhMLxMjTsFbfLUoziVUypQU4qPI"], ["Black", "1ai9s-0J1l0jj2bmQ8G-PnQl-81zL74iI"]]}, {"name": "Jaket Varsity", "cat": "Jaket Pria", "price": 175500, "old": 0, "modal": 135000, "variants": [["Yellow", "1gKwtIu46CtPSsl3XjnD7REZ6geR-Rhuf"], ["Maron", "1BkRF4N3-V3S7mTGX9y9pLgt9WJOYrxvo"], ["Brick", "1Jli5f2Dhr0V5PHCSkvB31Hj3rqT_Bs8E"], ["Black", "1N3iCJFKMcf5wphXOtHEW49UcqMB6ayqz"], ["Army", "1AbDhbzP4JdOE7xxNggt9D4EpMS4SbJsA"], ["Navy", "1YdDh3vvPRYYAVaE3w9q2XdQfMZ7r8RCy"]]}, {"name": "Jaket Kickgas", "cat": "Jaket Pria", "price": 219700, "old": 0, "modal": 169000, "variants": [["Army", "1UaXg15ami4QzhSeM9Psg4O69q7TXOh6q"], ["Maron", "10mMAaiMDX8wpGBzzITEvW35rCmoXTHsZ"], ["Navy", "1dCi82LVWbSluLSWSrN91v9zAWZveNOYu"], ["Yellow", "1ZIpcrqftQAZP1AwoHOZaqVVMKD8DbphW"]]}, {"name": "Jaket Urban", "cat": "Jaket Pria", "price": 214500, "old": 0, "modal": 165000, "variants": [["Grey", "1lLYtQm1_ezVzxIsoL1NZJlyi5KpdN-NI"], ["Toska", "1tkE7g3k_aaBk0tZj3gnzz3I8E0Hbvzft"], ["Maron", "1bbRauVt8N6sfCa2exEmvy9tRjA7iiV2Z"], ["Green", "1sgMNI71ssKtpxBYNclXm8q0Db9zhRV9Y"], ["Yellow", "1DaZqgp47-NMlDaoJdV38SIgBzAi-yk7w"]]}, {"name": "Mukena Ara", "cat": "Mukena", "price": 201500, "old": 0, "modal": 155000, "variants": [["Purple", "1zhIYeCN02J1oH8HYYGbsuSxmh862lF7W"], ["Yellow", "1Ycb_ndDA-ZYkpY0N80bxCPNkB1lq9jV1"], ["Pink", "1dD0zy-sbEnu1p2w7rCrHEp48G66xa46d"]]}, {"name": "Aziz", "cat": "Busana Anak", "price": 175500, "old": 0, "modal": 135000, "variants": [["Grey", "1jJcSvJtyds3hw8U7WGSbccW3e0RO_Exu"], ["Bata", "1BUOX9GvpYvbiDr6LGS4uRBDang2dPg5s"], ["Brown", "14nC-ilw3cZyd7BxnApBIurg8pZ3ueewh"]]}, {"name": "Belie", "cat": "Busana Anak", "price": 175500, "old": 0, "modal": 135000, "variants": [["Mauve", "1thU7LN07M-H4Kf7nMxLq2KZh45o3Ub9B"], ["Denim", "1bXhNPPIdYyBKSNP8cgNanB7h9Rjv0nyU"], ["Navy", "105CmHswdGv6OhkRr_hN4KT0KzYvNzlnr"], ["Mint", "1CZrYjZOlH_NDdMChs_K8N7vwgfuy8epl"], ["Maroon", "1GMpNybR9dHVLbdNS0P6uw_LA6vvjBNRe"], ["Army", "1ocIykcZNMs9u5SLpYUPSuVnGoofMHeJp"], ["Sage", "12qP5si7SojndSnpCkr-sHlZSVAZTXVYx"]]}, {"name": "Feny", "cat": "Busana Anak", "price": 141700, "old": 0, "modal": 109000, "desc": "Size M Rp 141.700 | Size L Rp 149.500 - Info size di WA.", "variants": [["A", "1S65ZckdpNsS2iKsgidVyqYf1IUEJ3Wqd"], ["B", "1FpvMMrYZY6zrZ4J3vjg8zs5R9AHxTg49"], ["C", "1dXh-GYPhrk1_V8CWdGqOtmeCD0drTE6p"], ["D", "1bVTKdFjAZSbl-Zz9bsALWTFISHRq3F7D"], ["E", "12UnB1CydSELxAJ6Lgc6PxHZOdHWteCoh"], ["F", "12D45U4kkgr9Uhv0TBLslzsKzhFMOAQrv"]]}, {"name": "Givea", "cat": "Busana Anak", "price": 141700, "old": 0, "modal": 109000, "variants": [["Milo", "1RgvvQiYxgJadwzbY1PS0_0yNsMxW9R2z"], ["Black", "17AJENAl5Q_b4QHHdaHkbBcyebcIWCboc"], ["Ivory", "1fWBw1BAyDivi6Yp2kUX07iniqsHM4guX"], ["Grey", "1_YsoJVNxpWtk-5m-adFFndECHHyaA4eY"]]}];
+function load(key, fallback){try{const v=localStorage.getItem(key);return v?JSON.parse(v):fallback;}catch(e){return fallback;}}
+function save(key, val){localStorage.setItem(key, JSON.stringify(val));}
+let DATA = load('amaya_products', DEFAULT_PRODUCTS);
+let ORDERS = load('amaya_orders', []);
+let STOCK = load('amaya_stock', null);
+if(!STOCK){
+  STOCK=[];
+  DATA.forEach((p,pi)=>{
+    p.variants.forEach((v,vi)=>{
+      STOCK.push({pi:pi, vi:vi, produk:p.name, varian:v[0], jumlah:10, masuk:new Date().toISOString().slice(0,10), keluar:''});
+    });
+  });
+  save('amaya_stock', STOCK);
+}
+function saveAll(){save('amaya_products', DATA); save('amaya_orders', ORDERS); save('amaya_stock', STOCK);}
+function rp(n){return 'Rp '+n.toLocaleString('id-ID');}
+function thumb(fid){return 'https://drive.google.com/thumbnail?id='+fid+'&sz=w1000';}
+function thumbFallback(fid){return 'https://drive.google.com/uc?export=view&id='+fid;}
+let cat='Semua';
+function renderCatalog(){
+  const list=document.getElementById('list'); list.innerHTML='';
+  DATA.forEach((p,idx)=>{
+    if(p.hidden) return;
+    const chips=p.variants.map((v,vi)=>`<button class="chip ${vi===0?'active':''}" onclick="gantiGambar(${idx},${vi},this,'${v[0].replace(/'/g,"")}')">${v[0]}</button>`).join('');
+    const oldHtml=p.old?`<span class="old">${rp(p.old)}</span>`:'';
+    const sticker=p.is_bundle?`<div class="sticker">BUNDLE</div>`:p.promo?`<div class="sticker">PROMO</div>`:'';
+    const desc=p.desc?`<p class="desc">${p.desc}</p>`:'';
+    const label=p.is_bundle?'Pilihan:':'Warna:';
+    const firstFid=p.variants[0][1];
+    let imgHtml='';
+    if(p.is_bundle && p.variants[0][2]){
+      imgHtml=`<div class="imgwrap bundle">${sticker}<img id="img-${idx}" src="${thumb(firstFid)}" onerror="this.onerror=null;this.src='${thumbFallback(firstFid)}'" alt="${p.name}" loading="lazy"><div class="plus">+</div><img id="img2-${idx}" src="${thumb(p.variants[0][2])}" onerror="this.onerror=null;this.src='${thumbFallback(p.variants[0][2])}'" alt="${p.name} 2" loading="lazy"></div>`;
+    } else {
+      imgHtml=`<div class="imgwrap">${sticker}<img id="img-${idx}" src="${thumb(firstFid)}" onerror="this.onerror=null;this.src='${thumbFallback(firstFid)}'" alt="${p.name}" loading="lazy"></div>`;
+    }
+    const card=document.createElement('article'); card.className='card'; card.dataset.cat=p.cat; card.dataset.name=p.name.toLowerCase();
+    card.innerHTML=`${imgHtml}<div class="body"><span class="cat">${p.cat}</span><h3>${p.name}</h3><div class="price">${rp(p.price)} ${oldHtml}</div>${desc}<p class="vlabel">${label} <b id="vname-${idx}">${p.variants[0][0]}</b></p><div class="chips">${chips}</div><p class="ongkir">Jawa: <b>Gratis Ongkir</b> | Luar Jawa: <a href="https://cek-ongkir.com/" target="_blank" rel="noopener">Cek Ongkir</a></p><a class="wa" href="#" onclick="orderWA(${idx});return false;">Order via WA</a><button class="share" onclick="shareProduk(${idx})">🔗 Bagikan Produk</button><p class="share-note">Bagikan produk untuk mendapatkan gratis ongkir P. Jawa</p></div>`;
+    list.appendChild(card);
+  });
+  filter();
+}
+const BUNDLE_SECOND={};
+DATA.forEach((p,pi)=>{ if(p.is_bundle){ BUNDLE_SECOND[pi]=p.variants.map(v=>v[2]||v[1]); }});
+function gantiGambar(pi,vi,btn,vname){
+  const p=DATA[pi]; const fid=p.variants[vi][1];
+  const img=document.getElementById('img-'+pi); if(img){img.src=thumb(fid); img.onerror=function(){this.onerror=null;this.src=thumbFallback(fid);}}
+  const img2=document.getElementById('img2-'+pi); if(img2 && BUNDLE_SECOND[pi]){const fid2=BUNDLE_SECOND[pi][vi]||BUNDLE_SECOND[pi][0]; img2.src=thumb(fid2); img2.onerror=function(){this.onerror=null;this.src=thumbFallback(fid2);} }
+  document.getElementById('vname-'+pi).textContent=vname;
+  btn.parentElement.querySelectorAll('.chip').forEach(c=>c.classList.remove('active')); btn.classList.add('active');
+}
+function orderWA(pi){
+  const p=DATA[pi]; const v=document.getElementById('vname-'+pi).textContent;
+  const idx=p.variants.findIndex(x=>x[0]===v); const fid=p.variants[idx>=0?idx:0][1];
+  const foto=thumb(fid);
+  let msg='Halo Amaya Fashion, mau order '+p.name+' - Pilihan: '+v+' - Harga: '+rp(p.price)+' - Apakah masih ada?\n\nFoto produk: \n'+foto;
+  if(BUNDLE_SECOND[pi]){const fid2=BUNDLE_SECOND[pi][idx>=0?idx:0]||BUNDLE_SECOND[pi][0]; msg+='\n\nFoto produk 2: \n'+thumb(fid2);}
+  msg+='\n(Klik link foto untuk lihat gambar)';
+  // Simpan order otomatis ke admin (mulai dari sekarang)
+  ORDERS.unshift({id:Date.now(), tanggal:new Date().toISOString().slice(0,10), produk:p.name, varian:v, harga:p.price, modal:p.modal||0, status:'Baru', alasan:'', pi:pi, vi:idx>=0?idx:0});
+  saveAll();
+  window.open('https://wa.me/6282224437059?text='+encodeURIComponent(msg),'_blank');
+}
+function shareProduk(pi){
+  const p=DATA[pi]; const v=document.getElementById('vname-'+pi).textContent;
+  const idx=p.variants.findIndex(x=>x[0]===v); const fid=p.variants[idx>=0?idx:0][1];
+  let text='Lihat nih! '+p.name+' - Pilihan: '+v+' - Harga: '+rp(p.price)+' di Amaya Fashion!\nJawa GRATIS ONGKIR, Luar Jawa cek ongkir dulu.\n\nFoto produk: '+thumb(fid);
+  if(BUNDLE_SECOND[pi]){const fid2=BUNDLE_SECOND[pi][idx>=0?idx:0]||BUNDLE_SECOND[pi][0]; text+='\nFoto produk 2: '+thumb(fid2);}
+  text+='\n\nKatalog lengkap: https://amayafesyen.netlify.app\nOrder WA: https://wa.me/6282224437059';
+  if(navigator.share){navigator.share({title:'Amaya Fashion - '+p.name, text:text, url:'https://amayafesyen.netlify.app'}).catch(()=>{window.open('https://wa.me/?text='+encodeURIComponent(text),'_blank');});}
+  else{window.open('https://wa.me/?text='+encodeURIComponent(text),'_blank');}
+}
+function setCat(c,btn){cat=c; document.querySelectorAll('.filters button').forEach(b=>b.classList.remove('active')); btn.classList.add('active'); filter();}
+function filter(){
+  const q=(document.getElementById('search').value||'').toLowerCase();
+  document.querySelectorAll('.card').forEach(card=>{
+    const name=card.dataset.name; const c=card.dataset.cat;
+    let ok=true;
+    if(cat==='Bundle Promo') ok=(c==='Bundle Promo'); else if(cat!=='Semua') ok=(c===cat);
+    if(q && q!=='amaya123' && !name.includes(q)) ok=false;
+    card.style.display=ok?'':'none';
+  });
+}
+function checkAdmin(){
+  const el=document.getElementById('search');
+  const val=(el.value||'').trim().toUpperCase();
+  if(val==='AMAYA123'){
+    document.getElementById('katalogPage').style.display='none';
+    document.getElementById('adminPage').style.display='block';
+    document.getElementById('search').value='';
+    renderAdmin();
+    window.scrollTo(0,0);
+  } else {
+    filter();
+  }
+}
+function keluarAdmin(){document.getElementById('adminPage').style.display='none'; document.getElementById('katalogPage').style.display='block'; renderCatalog();}
+function kunciAdmin(){keluarAdmin();}
+function showTab(name){
+  ['Produk','Order','Stok'].forEach(t=>{document.getElementById('tab'+t).style.display=(t===name?'block':'none'); document.getElementById('tabBtn'+t).classList.toggle('active', t===name);});
+  renderAdmin();
+}
+function renderAdmin(){
+  // Produk
+  let hp=`<div class="admin-card"><h4>+ Tambah Produk Baru</h4><div class="admin-row"><input id="np_nama" placeholder="Nama produk"><select id="np_cat"><option>Blouse Dewasa</option><option>Jaket Pria</option><option>Kemko Pria</option><option>Mukena</option><option>Gamis Wanita</option><option>Celana Wanita</option><option>Setelan Wanita</option><option>Busana Anak</option><option>Bundle Promo</option></select></div><div class="admin-row"><input id="np_modal" type="number" placeholder="Harga Modal" oninput="document.getElementById('np_jual').value=Math.round(this.value*1.3)"><input id="np_jual" type="number" placeholder="Harga Jual (auto modal x1.3)"><input id="np_old" type="number" placeholder="Harga Coret (opsional)"></div><div class="admin-row"><textarea id="np_varian" placeholder="Varian warna, format: Nama:FileID Drive, pisah koma. Contoh: Brown:1abc, Black:1def"></textarea></div><div class="admin-row"><input id="np_desc" placeholder="Deskripsi (opsional)"><label style="font-size:13px"><input type="checkbox" id="np_promo"> Promo</label></div><button class="btn btn-green" style="margin-top:10px" onclick="tambahProduk()">Simpan Produk</button><p style="font-size:12px;color:#888">FileID Drive = ID di link Drive, contoh link .../file/d/1abc/view → ID-nya 1abc</p></div>`;
+  hp+=`<div class="admin-card"><h4>Daftar Produk (${DATA.length}) - Klik Edit untuk ganti harga</h4>`;
+  DATA.forEach((p,i)=>{
+    hp+=`<div style="border-bottom:1px solid #eee;padding:10px 0;display:flex;gap:10px;align-items:center"><img src="${thumb(p.variants[0][1])}" style="width:56px;height:56px;object-fit:cover;border-radius:10px" onerror="this.style.display='none'"><div style="flex:1"><b>${p.name}</b><div style="font-size:12px;color:#666">${p.cat} • Jual ${rp(p.price)} • Modal ${rp(p.modal||0)} • ${p.variants.length} varian ${p.hidden?'• <b>TERSEMBUNYI</b>':''}</div></div><button class="btn btn-ghost" onclick="editProduk(${i})">Edit Harga</button><button class="btn btn-ghost" onclick="toggleHidden(${i})">${p.hidden?'Tampilkan':'Sembunyikan'}</button></div>`;
+  });
+  hp+=`</div>`;
+  document.getElementById('tabProduk').innerHTML=hp;
+  // Order
+  const filterStatus=document.getElementById('orderFilter')?.value||'Semua';
+  let ho=`<div class="admin-card"><h4>Riwayat Order (${ORDERS.length})</h4><div class="admin-row"><select id="orderFilter" onchange="renderAdmin();showTab('Order')"><option>Semua</option><option>Baru</option><option>Diproses</option><option>Dikirim</option><option>Selesai</option><option>Dibatalkan</option></select><span style="font-size:12px;color:#888">Order baru dari klik WA otomatis masuk status Baru</span></div></div>`;
+  const list=ORDERS.filter(o=>filterStatus==='Semua'||o.status===filterStatus);
+  if(list.length===0) ho+=`<div class="admin-card">Belum ada order. Order baru akan muncul otomatis kalau customer klik Order via WA.</div>`;
+  list.forEach(o=>{
+    ho+=`<div class="admin-card"><div style="display:flex;justify-content:space-between"><b>${o.produk} - ${o.varian}</b><span class="badge b-${o.status}">${o.status}</span></div><div style="font-size:13px;color:#666;margin:6px 0">${o.tanggal} • ${rp(o.harga)} • Untung ${rp(o.harga-(o.modal||0))} ${o.alasan?`• Alasan Batal: ${o.alasan}`:''}</div><div class="admin-row"><select id="st-${o.id}"><option>Baru</option><option>Diproses</option><option>Dikirim</option><option>Selesai</option><option>Dibatalkan</option></select><button class="btn btn-dark" onclick="ubahStatus(${o.id})">Ubah Status</button></div><div id="alasan-${o.id}" style="display:none;margin-top:8px"><textarea id="alasanInput-${o.id}" placeholder="Alasan batal, contoh: Customer gak respon 2 hari"></textarea></div></div>`;
+  });
+  document.getElementById('tabOrder').innerHTML=ho;
+  list.forEach(o=>{const sel=document.getElementById('st-'+o.id); if(sel){sel.value=o.status; sel.onchange=()=>{document.getElementById('alasan-'+o.id).style.display=(sel.value==='Dibatalkan'?'block':'none');}}});
+  // Stok & Rekap
+  const today=new Date().toISOString().slice(0,10);
+  const selesai=ORDERS.filter(o=>o.status==='Selesai');
+  const untungTotal=selesai.reduce((s,o)=>s+(o.harga-(o.modal||0)),0);
+  const untungHari=selesai.filter(o=>o.tanggal===today).reduce((s,o)=>s+(o.harga-(o.modal||0)),0);
+  const jumlahHari=selesai.filter(o=>o.tanggal===today).length;
+  const mingguIni=selesai.filter(o=>{const d=new Date(o.tanggal); const now=new Date(); const diff=(now-d)/(1000*60*60*24); return diff<7;});
+  const untungMinggu=mingguIni.reduce((s,o)=>s+(o.harga-(o.modal||0)),0);
+  let hs=`<div class="admin-card"><h4>Rekap Untung Otomatis</h4><div class="rekap"><div><b>${jumlahHari} order</b>Hari Ini<br>${rp(untungHari)}</div><div><b>${mingguIni.length} order</b>Minggu Ini<br>${rp(untungMinggu)}</div><div><b>${selesai.length} order</b>Total Selesai<br>${rp(untungTotal)}</div></div><p style="font-size:12px;color:#888">Untung = Harga Jual - Harga Modal, hanya hitung order Selesai. Dibatalkan tidak dihitung.</p></div>`;
+  hs+=`<div class="admin-card"><h4>+ Stok Masuk</h4><div class="admin-row"><select id="sm_produk">${DATA.map((p,i)=>`<option value="${i}">${p.name}</option>`).join('')}</select><select id="sm_varian"></select><input id="sm_jumlah" type="number" value="10" placeholder="Jumlah"><input id="sm_tanggal" type="date" value="${today}"></div><button class="btn btn-green" style="margin-top:10px" onclick="tambahStok()">Tambah Stok</button></div>`;
+  hs+=`<div class="admin-card"><h4>Rekap Stok</h4><table><tr><th>Produk</th><th>Varian</th><th>Jumlah</th><th>Masuk</th><th>Keluar</th><th>Status</th></tr>${STOCK.map((s,si)=>{let st='Aman'; let cls='stock-ok'; if(s.jumlah===0){st='Habis'; cls='stock-low';} else if(s.jumlah<=5){st='Menipis'; cls='stock-mid';} return `<tr><td>${s.produk}</td><td>${s.varian}</td><td>${s.jumlah}</td><td>${s.masuk}</td><td>${s.keluar||'-'}</td><td class="${cls}">${st}</td></tr>`;}).join('')}</table></div>`;
+  document.getElementById('tabStok').innerHTML=hs;
+  const smP=document.getElementById('sm_produk'); if(smP){function isiVarian(){const pi=parseInt(smP.value); document.getElementById('sm_varian').innerHTML=DATA[pi].variants.map((v,vi)=>`<option value="${vi}">${v[0]}</option>`).join('');} smP.onchange=isiVarian; isiVarian();}
+}
+function tambahProduk(){
+  const nama=document.getElementById('np_nama').value.trim(); const cat=document.getElementById('np_cat').value; const modal=parseInt(document.getElementById('np_modal').value||0); const jual=parseInt(document.getElementById('np_jual').value||0); const old=parseInt(document.getElementById('np_old').value||0); const desc=document.getElementById('np_desc').value; const promo=document.getElementById('np_promo').checked;
+  const varianText=document.getElementById('np_varian').value.trim();
+  if(!nama||!jual||!varianText){alert('Isi Nama, Harga Jual, dan Varian dulu'); return;}
+  const variants=varianText.split(',').map(s=>{const parts=s.split(':'); return [parts[0].trim(), (parts[1]||'').trim()];}).filter(v=>v[1]);
+  const p={name:nama, cat:cat, price:jual, old:old, modal:modal, promo:promo, variants:variants, desc:desc};
+  DATA.push(p);
+  const pi=DATA.length-1; variants.forEach((v,vi)=>{STOCK.push({pi:pi, vi:vi, produk:nama, varian:v[0], jumlah:10, masuk:new Date().toISOString().slice(0,10), keluar:''});});
+  saveAll(); renderAdmin(); renderCatalog(); alert('Produk berhasil ditambah!');
+}
+function editProduk(i){
+  const p=DATA[i]; const jual=prompt('Harga Jual baru untuk '+p.name, p.price); if(jual===null) return;
+  const modal=prompt('Harga Modal baru', p.modal||0); if(modal===null) return;
+  const old=prompt('Harga Coret (0 jika tidak promo)', p.old||0); if(old===null) return;
+  p.price=parseInt(jual)||p.price; p.modal=parseInt(modal)||p.modal; p.old=parseInt(old)||0; p.promo=p.old>0;
+  saveAll(); renderAdmin(); renderCatalog(); alert('Harga berhasil diubah!');
+}
+function toggleHidden(i){DATA[i].hidden=!DATA[i].hidden; saveAll(); renderAdmin(); renderCatalog();}
+function ubahStatus(id){
+  const o=ORDERS.find(x=>x.id===id); if(!o) return;
+  const sel=document.getElementById('st-'+id); const baru=sel.value; const lama=o.status;
+  if(baru==='Dibatalkan'){
+    const alasan=(document.getElementById('alasanInput-'+id)?.value||'').trim();
+    if(!alasan){alert('Isi Alasan Batal dulu'); return;}
+    o.alasan=alasan;
+    if(lama==='Selesai'){
+      const s=STOCK.find(x=>x.pi===o.pi && x.vi===o.vi); if(s) s.jumlah+=1;
+    }
+  }
+  if(baru==='Selesai' && lama!=='Selesai'){
+    const s=STOCK.find(x=>x.pi===o.pi && x.vi===o.vi); if(s){ if(s.jumlah>0) s.jumlah-=1; s.keluar=new Date().toISOString().slice(0,10); }
+  }
+  o.status=baru; saveAll(); renderAdmin();
+}
+function tambahStok(){
+  const pi=parseInt(document.getElementById('sm_produk').value); const vi=parseInt(document.getElementById('sm_varian').value); const jml=parseInt(document.getElementById('sm_jumlah').value||0); const tgl=document.getElementById('sm_tanggal').value;
+  const s=STOCK.find(x=>x.pi===pi && x.vi===vi);
+  if(s){s.jumlah+=jml; s.masuk=tgl; } else {STOCK.push({pi:pi, vi:vi, produk:DATA[pi].name, varian:DATA[pi].variants[vi][0], jumlah:jml, masuk:tgl, keluar:''});}
+  saveAll(); renderAdmin(); alert('Stok ditambah!');
+}
+renderCatalog();
+</script></body></html>
