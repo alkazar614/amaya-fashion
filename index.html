@@ -139,8 +139,8 @@ function shareProduk(pi){
   const idx=p.variants.findIndex(x=>x[0]===v); const fid=p.variants[idx>=0?idx:0][1];
   let text='Lihat nih! '+p.name+' - Pilihan: '+v+' - Harga: '+rp(p.price)+' di Amaya Fashion!\nJawa GRATIS ONGKIR, Luar Jawa cek ongkir dulu.\n\nFoto produk: '+thumb(fid);
   if(BUNDLE_SECOND[pi]){const fid2=BUNDLE_SECOND[pi][idx>=0?idx:0]||BUNDLE_SECOND[pi][0]; text+='\nFoto produk 2: '+thumb(fid2);}
-  text+='\n\nKatalog lengkap: https://amayafesyen.netlify.app\nOrder WA: https://wa.me/6282224437059';
-  if(navigator.share){navigator.share({title:'Amaya Fashion - '+p.name, text:text, url:'https://amayafesyen.netlify.app'}).catch(()=>{window.open('https://wa.me/?text='+encodeURIComponent(text),'_blank');});}
+  text+='\n\nKatalog lengkap: https://alkazar614.github.io/amaya-fashion/\nOrder WA: https://wa.me/6282224437059';
+  if(navigator.share){navigator.share({title:'Amaya Fashion - '+p.name, text:text, url:'https://alkazar614.github.io/amaya-fashion/'}).catch(()=>{window.open('https://wa.me/?text='+encodeURIComponent(text),'_blank');});}
   else{window.open('https://wa.me/?text='+encodeURIComponent(text),'_blank');}
 }
 function setCat(c,btn){cat=c; document.querySelectorAll('.filters button').forEach(b=>b.classList.remove('active')); btn.classList.add('active'); filter();}
@@ -168,6 +168,87 @@ function checkAdmin(){
   }
 }
 function keluarAdmin(){document.getElementById('adminPage').style.display='none'; document.getElementById('katalogPage').style.display='block'; 
+
+renderCatalog();}
+function kunciAdmin(){keluarAdmin();}
+function showTab(name){
+  ['Produk','Order','Stok'].forEach(t=>{document.getElementById('tab'+t).style.display=(t===name?'block':'none'); document.getElementById('tabBtn'+t).classList.toggle('active', t===name);});
+  renderAdmin();
+}
+function renderAdmin(){
+  // Produk
+  let hp=`<div class="admin-card"><h4>+ Tambah Produk Baru</h4><div class="admin-row"><input id="np_nama" placeholder="Nama produk"><select id="np_cat"><option>Blouse Dewasa</option><option>Jaket Pria</option><option>Kemko Pria</option><option>Mukena</option><option>Gamis Wanita</option><option>Celana Wanita</option><option>Setelan Wanita</option><option>Busana Anak</option><option>Bundle Promo</option><option>Daster</option><option>Tunik</option><option>Sarung</option></select></div><div class="admin-row"><input id="np_modal" type="number" placeholder="Harga Modal" oninput="document.getElementById('np_jual').value=Math.round(this.value*1.3)"><input id="np_jual" type="number" placeholder="Harga Jual (auto modal x1.3)"><input id="np_old" type="number" placeholder="Harga Coret (opsional)"></div><div class="admin-row"><textarea id="np_varian" placeholder="Varian warna, format: Nama:FileID Drive, pisah koma. Contoh: Brown:1abc, Black:1def"></textarea></div><div class="admin-row"><input id="np_desc" placeholder="Deskripsi (opsional)"><label style="font-size:13px"><input type="checkbox" id="np_promo"> Promo</label></div><button class="btn btn-green" style="margin-top:10px" onclick="tambahProduk()">Simpan Produk</button><p style="font-size:12px;color:#888">FileID Drive = ID di link Drive, contoh link .../file/d/1abc/view → ID-nya 1abc</p></div>`;
+  hp+=`<div class="admin-card"><h4>Daftar Produk (${DATA.length}) - Klik Edit untuk ganti harga</h4>`;
+  DATA.forEach((p,i)=>{
+    hp+=`<div style="border-bottom:1px solid #eee;padding:10px 0;display:flex;gap:10px;align-items:center"><img src="${thumb(p.variants[0][1])}" style="width:56px;height:56px;object-fit:cover;border-radius:10px" onerror="this.style.display='none'"><div style="flex:1"><b>${p.name}</b><div style="font-size:12px;color:#666">${p.cat} • Jual ${rp(p.price)} • Modal ${rp(p.modal||0)} • ${p.variants.length} varian ${p.hidden?'• <b>TERSEMBUNYI</b>':''}</div></div><button class="btn btn-ghost" onclick="editProduk(${i})">Edit Harga</button><button class="btn btn-ghost" onclick="toggleHidden(${i})">${p.hidden?'Tampilkan':'Sembunyikan'}</button></div>`;
+  });
+  hp+=`</div>`;
+  document.getElementById('tabProduk').innerHTML=hp;
+  // Order
+  const filterStatus=document.getElementById('orderFilter')?.value||'Semua';
+  let ho=`<div class="admin-card"><h4>Riwayat Order (${ORDERS.length})</h4><div class="admin-row"><select id="orderFilter" onchange="renderAdmin();showTab('Order')"><option>Semua</option><option>Baru</option><option>Diproses</option><option>Dikirim</option><option>Selesai</option><option>Dibatalkan</option></select><span style="font-size:12px;color:#888">Order baru dari klik WA otomatis masuk status Baru</span></div></div>`;
+  const list=ORDERS.filter(o=>filterStatus==='Semua'||o.status===filterStatus);
+  if(list.length===0) ho+=`<div class="admin-card">Belum ada order. Order baru akan muncul otomatis kalau customer klik Order via WA.</div>`;
+  list.forEach(o=>{
+    ho+=`<div class="admin-card"><div style="display:flex;justify-content:space-between"><b>${o.produk} - ${o.varian}</b><span class="badge b-${o.status}">${o.status}</span></div><div style="font-size:13px;color:#666;margin:6px 0">${o.tanggal} • ${rp(o.harga)} • Untung ${rp(o.harga-(o.modal||0))} ${o.alasan?`• Alasan Batal: ${o.alasan}`:''}</div><div class="admin-row"><select id="st-${o.id}"><option>Baru</option><option>Diproses</option><option>Dikirim</option><option>Selesai</option><option>Dibatalkan</option></select><button class="btn btn-dark" onclick="ubahStatus(${o.id})">Ubah Status</button></div><div id="alasan-${o.id}" style="display:none;margin-top:8px"><textarea id="alasanInput-${o.id}" placeholder="Alasan batal, contoh: Customer gak respon 2 hari"></textarea></div></div>`;
+  });
+  document.getElementById('tabOrder').innerHTML=ho;
+  list.forEach(o=>{const sel=document.getElementById('st-'+o.id); if(sel){sel.value=o.status; sel.onchange=()=>{document.getElementById('alasan-'+o.id).style.display=(sel.value==='Dibatalkan'?'block':'none');}}});
+  // Stok & Rekap
+  const today=new Date().toISOString().slice(0,10);
+  const selesai=ORDERS.filter(o=>o.status==='Selesai');
+  const untungTotal=selesai.reduce((s,o)=>s+(o.harga-(o.modal||0)),0);
+  const untungHari=selesai.filter(o=>o.tanggal===today).reduce((s,o)=>s+(o.harga-(o.modal||0)),0);
+  const jumlahHari=selesai.filter(o=>o.tanggal===today).length;
+  const mingguIni=selesai.filter(o=>{const d=new Date(o.tanggal); const now=new Date(); const diff=(now-d)/(1000*60*60*24); return diff<7;});
+  const untungMinggu=mingguIni.reduce((s,o)=>s+(o.harga-(o.modal||0)),0);
+  let hs=`<div class="admin-card"><h4>Rekap Untung Otomatis</h4><div class="rekap"><div><b>${jumlahHari} order</b>Hari Ini<br>${rp(untungHari)}</div><div><b>${mingguIni.length} order</b>Minggu Ini<br>${rp(untungMinggu)}</div><div><b>${selesai.length} order</b>Total Selesai<br>${rp(untungTotal)}</div></div><p style="font-size:12px;color:#888">Untung = Harga Jual - Harga Modal, hanya hitung order Selesai. Dibatalkan tidak dihitung.</p></div>`;
+  hs+=`<div class="admin-card"><h4>+ Stok Masuk</h4><div class="admin-row"><select id="sm_produk">${DATA.map((p,i)=>`<option value="${i}">${p.name}</option>`).join('')}</select><select id="sm_varian"></select><input id="sm_jumlah" type="number" value="10" placeholder="Jumlah"><input id="sm_tanggal" type="date" value="${today}"></div><button class="btn btn-green" style="margin-top:10px" onclick="tambahStok()">Tambah Stok</button></div>`;
+  hs+=`<div class="admin-card"><h4>Rekap Stok</h4><table><tr><th>Produk</th><th>Varian</th><th>Jumlah</th><th>Masuk</th><th>Keluar</th><th>Status</th></tr>${STOCK.map((s,si)=>{let st='Aman'; let cls='stock-ok'; if(s.jumlah===0){st='Habis'; cls='stock-low';} else if(s.jumlah<=5){st='Menipis'; cls='stock-mid';} return `<tr><td>${s.produk}</td><td>${s.varian}</td><td>${s.jumlah}</td><td>${s.masuk}</td><td>${s.keluar||'-'}</td><td class="${cls}">${st}</td></tr>`;}).join('')}</table></div>`;
+  document.getElementById('tabStok').innerHTML=hs;
+  const smP=document.getElementById('sm_produk'); if(smP){function isiVarian(){const pi=parseInt(smP.value); document.getElementById('sm_varian').innerHTML=DATA[pi].variants.map((v,vi)=>`<option value="${vi}">${v[0]}</option>`).join('');} smP.onchange=isiVarian; isiVarian();}
+}
+function tambahProduk(){
+  const nama=document.getElementById('np_nama').value.trim(); const cat=document.getElementById('np_cat').value; const modal=parseInt(document.getElementById('np_modal').value||0); const jual=parseInt(document.getElementById('np_jual').value||0); const old=parseInt(document.getElementById('np_old').value||0); const desc=document.getElementById('np_desc').value; const promo=document.getElementById('np_promo').checked;
+  const varianText=document.getElementById('np_varian').value.trim();
+  if(!nama||!jual||!varianText){alert('Isi Nama, Harga Jual, dan Varian dulu'); return;}
+  const variants=varianText.split(',').map(s=>{const parts=s.split(':'); return [parts[0].trim(), (parts[1]||'').trim()];}).filter(v=>v[1]);
+  const p={name:nama, cat:cat, price:jual, old:old, modal:modal, promo:promo, variants:variants, desc:desc};
+  DATA.push(p);
+  const pi=DATA.length-1; variants.forEach((v,vi)=>{STOCK.push({pi:pi, vi:vi, produk:nama, varian:v[0], jumlah:10, masuk:new Date().toISOString().slice(0,10), keluar:''});});
+  saveAll(); renderAdmin(); renderCatalog(); alert('Produk berhasil ditambah!');
+}
+function editProduk(i){
+  const p=DATA[i]; const jual=prompt('Harga Jual baru untuk '+p.name, p.price); if(jual===null) return;
+  const modal=prompt('Harga Modal baru', p.modal||0); if(modal===null) return;
+  const old=prompt('Harga Coret (0 jika tidak promo)', p.old||0); if(old===null) return;
+  p.price=parseInt(jual)||p.price; p.modal=parseInt(modal)||p.modal; p.old=parseInt(old)||0; p.promo=p.old>0;
+  saveAll(); renderAdmin(); renderCatalog(); alert('Harga berhasil diubah!');
+}
+function toggleHidden(i){DATA[i].hidden=!DATA[i].hidden; saveAll(); renderAdmin(); renderCatalog();}
+function ubahStatus(id){
+  const o=ORDERS.find(x=>x.id===id); if(!o) return;
+  const sel=document.getElementById('st-'+id); const baru=sel.value; const lama=o.status;
+  if(baru==='Dibatalkan'){
+    const alasan=(document.getElementById('alasanInput-'+id)?.value||'').trim();
+    if(!alasan){alert('Isi Alasan Batal dulu'); return;}
+    o.alasan=alasan;
+    if(lama==='Selesai'){
+      const s=STOCK.find(x=>x.pi===o.pi && x.vi===o.vi); if(s) s.jumlah+=1;
+    }
+  }
+  if(baru==='Selesai' && lama!=='Selesai'){
+    const s=STOCK.find(x=>x.pi===o.pi && x.vi===o.vi); if(s){ if(s.jumlah>0) s.jumlah-=1; s.keluar=new Date().toISOString().slice(0,10); }
+  }
+  o.status=baru; saveAll(); renderAdmin();
+}
+function tambahStok(){
+  const pi=parseInt(document.getElementById('sm_produk').value); const vi=parseInt(document.getElementById('sm_varian').value); const jml=parseInt(document.getElementById('sm_jumlah').value||0); const tgl=document.getElementById('sm_tanggal').value;
+  const s=STOCK.find(x=>x.pi===pi && x.vi===vi);
+  if(s){s.jumlah+=jml; s.masuk=tgl; } else {STOCK.push({pi:pi, vi:vi, produk:DATA[pi].name, varian:DATA[pi].variants[vi][0], jumlah:jml, masuk:tgl, keluar:''});}
+  saveAll(); renderAdmin(); alert('Stok ditambah!');
+}
+renderCatalog();
 let _posterPi = 0;
 let _posterBlob = null;
 function openPoster(pi){
@@ -271,7 +352,7 @@ function drawCover(ctx, img, x, y, w, h){
   const nw = iw*scale, nh = ih*scale;
   const dx = x + (w-nw)/2, dy = y + (h-nh)/2;
   ctx.save();
-  ctx.beginPath(); ctx.roundRect(x, y, w, h, 20); ctx.clip();
+  roundRect(ctx, x, y, w, h, 20); ctx.clip();
   ctx.drawImage(img, dx, dy, nw, nh);
   ctx.restore();
 }
@@ -306,84 +387,4 @@ async function sharePosterFile(){
   }
 }
 
-renderCatalog();}
-function kunciAdmin(){keluarAdmin();}
-function showTab(name){
-  ['Produk','Order','Stok'].forEach(t=>{document.getElementById('tab'+t).style.display=(t===name?'block':'none'); document.getElementById('tabBtn'+t).classList.toggle('active', t===name);});
-  renderAdmin();
-}
-function renderAdmin(){
-  // Produk
-  let hp=`<div class="admin-card"><h4>+ Tambah Produk Baru</h4><div class="admin-row"><input id="np_nama" placeholder="Nama produk"><select id="np_cat"><option>Blouse Dewasa</option><option>Jaket Pria</option><option>Kemko Pria</option><option>Mukena</option><option>Gamis Wanita</option><option>Celana Wanita</option><option>Setelan Wanita</option><option>Busana Anak</option><option>Bundle Promo</option><option>Daster</option><option>Tunik</option><option>Sarung</option></select></div><div class="admin-row"><input id="np_modal" type="number" placeholder="Harga Modal" oninput="document.getElementById('np_jual').value=Math.round(this.value*1.3)"><input id="np_jual" type="number" placeholder="Harga Jual (auto modal x1.3)"><input id="np_old" type="number" placeholder="Harga Coret (opsional)"></div><div class="admin-row"><textarea id="np_varian" placeholder="Varian warna, format: Nama:FileID Drive, pisah koma. Contoh: Brown:1abc, Black:1def"></textarea></div><div class="admin-row"><input id="np_desc" placeholder="Deskripsi (opsional)"><label style="font-size:13px"><input type="checkbox" id="np_promo"> Promo</label></div><button class="btn btn-green" style="margin-top:10px" onclick="tambahProduk()">Simpan Produk</button><p style="font-size:12px;color:#888">FileID Drive = ID di link Drive, contoh link .../file/d/1abc/view → ID-nya 1abc</p></div>`;
-  hp+=`<div class="admin-card"><h4>Daftar Produk (${DATA.length}) - Klik Edit untuk ganti harga</h4>`;
-  DATA.forEach((p,i)=>{
-    hp+=`<div style="border-bottom:1px solid #eee;padding:10px 0;display:flex;gap:10px;align-items:center"><img src="${thumb(p.variants[0][1])}" style="width:56px;height:56px;object-fit:cover;border-radius:10px" onerror="this.style.display='none'"><div style="flex:1"><b>${p.name}</b><div style="font-size:12px;color:#666">${p.cat} • Jual ${rp(p.price)} • Modal ${rp(p.modal||0)} • ${p.variants.length} varian ${p.hidden?'• <b>TERSEMBUNYI</b>':''}</div></div><button class="btn btn-ghost" onclick="editProduk(${i})">Edit Harga</button><button class="btn btn-ghost" onclick="toggleHidden(${i})">${p.hidden?'Tampilkan':'Sembunyikan'}</button></div>`;
-  });
-  hp+=`</div>`;
-  document.getElementById('tabProduk').innerHTML=hp;
-  // Order
-  const filterStatus=document.getElementById('orderFilter')?.value||'Semua';
-  let ho=`<div class="admin-card"><h4>Riwayat Order (${ORDERS.length})</h4><div class="admin-row"><select id="orderFilter" onchange="renderAdmin();showTab('Order')"><option>Semua</option><option>Baru</option><option>Diproses</option><option>Dikirim</option><option>Selesai</option><option>Dibatalkan</option></select><span style="font-size:12px;color:#888">Order baru dari klik WA otomatis masuk status Baru</span></div></div>`;
-  const list=ORDERS.filter(o=>filterStatus==='Semua'||o.status===filterStatus);
-  if(list.length===0) ho+=`<div class="admin-card">Belum ada order. Order baru akan muncul otomatis kalau customer klik Order via WA.</div>`;
-  list.forEach(o=>{
-    ho+=`<div class="admin-card"><div style="display:flex;justify-content:space-between"><b>${o.produk} - ${o.varian}</b><span class="badge b-${o.status}">${o.status}</span></div><div style="font-size:13px;color:#666;margin:6px 0">${o.tanggal} • ${rp(o.harga)} • Untung ${rp(o.harga-(o.modal||0))} ${o.alasan?`• Alasan Batal: ${o.alasan}`:''}</div><div class="admin-row"><select id="st-${o.id}"><option>Baru</option><option>Diproses</option><option>Dikirim</option><option>Selesai</option><option>Dibatalkan</option></select><button class="btn btn-dark" onclick="ubahStatus(${o.id})">Ubah Status</button></div><div id="alasan-${o.id}" style="display:none;margin-top:8px"><textarea id="alasanInput-${o.id}" placeholder="Alasan batal, contoh: Customer gak respon 2 hari"></textarea></div></div>`;
-  });
-  document.getElementById('tabOrder').innerHTML=ho;
-  list.forEach(o=>{const sel=document.getElementById('st-'+o.id); if(sel){sel.value=o.status; sel.onchange=()=>{document.getElementById('alasan-'+o.id).style.display=(sel.value==='Dibatalkan'?'block':'none');}}});
-  // Stok & Rekap
-  const today=new Date().toISOString().slice(0,10);
-  const selesai=ORDERS.filter(o=>o.status==='Selesai');
-  const untungTotal=selesai.reduce((s,o)=>s+(o.harga-(o.modal||0)),0);
-  const untungHari=selesai.filter(o=>o.tanggal===today).reduce((s,o)=>s+(o.harga-(o.modal||0)),0);
-  const jumlahHari=selesai.filter(o=>o.tanggal===today).length;
-  const mingguIni=selesai.filter(o=>{const d=new Date(o.tanggal); const now=new Date(); const diff=(now-d)/(1000*60*60*24); return diff<7;});
-  const untungMinggu=mingguIni.reduce((s,o)=>s+(o.harga-(o.modal||0)),0);
-  let hs=`<div class="admin-card"><h4>Rekap Untung Otomatis</h4><div class="rekap"><div><b>${jumlahHari} order</b>Hari Ini<br>${rp(untungHari)}</div><div><b>${mingguIni.length} order</b>Minggu Ini<br>${rp(untungMinggu)}</div><div><b>${selesai.length} order</b>Total Selesai<br>${rp(untungTotal)}</div></div><p style="font-size:12px;color:#888">Untung = Harga Jual - Harga Modal, hanya hitung order Selesai. Dibatalkan tidak dihitung.</p></div>`;
-  hs+=`<div class="admin-card"><h4>+ Stok Masuk</h4><div class="admin-row"><select id="sm_produk">${DATA.map((p,i)=>`<option value="${i}">${p.name}</option>`).join('')}</select><select id="sm_varian"></select><input id="sm_jumlah" type="number" value="10" placeholder="Jumlah"><input id="sm_tanggal" type="date" value="${today}"></div><button class="btn btn-green" style="margin-top:10px" onclick="tambahStok()">Tambah Stok</button></div>`;
-  hs+=`<div class="admin-card"><h4>Rekap Stok</h4><table><tr><th>Produk</th><th>Varian</th><th>Jumlah</th><th>Masuk</th><th>Keluar</th><th>Status</th></tr>${STOCK.map((s,si)=>{let st='Aman'; let cls='stock-ok'; if(s.jumlah===0){st='Habis'; cls='stock-low';} else if(s.jumlah<=5){st='Menipis'; cls='stock-mid';} return `<tr><td>${s.produk}</td><td>${s.varian}</td><td>${s.jumlah}</td><td>${s.masuk}</td><td>${s.keluar||'-'}</td><td class="${cls}">${st}</td></tr>`;}).join('')}</table></div>`;
-  document.getElementById('tabStok').innerHTML=hs;
-  const smP=document.getElementById('sm_produk'); if(smP){function isiVarian(){const pi=parseInt(smP.value); document.getElementById('sm_varian').innerHTML=DATA[pi].variants.map((v,vi)=>`<option value="${vi}">${v[0]}</option>`).join('');} smP.onchange=isiVarian; isiVarian();}
-}
-function tambahProduk(){
-  const nama=document.getElementById('np_nama').value.trim(); const cat=document.getElementById('np_cat').value; const modal=parseInt(document.getElementById('np_modal').value||0); const jual=parseInt(document.getElementById('np_jual').value||0); const old=parseInt(document.getElementById('np_old').value||0); const desc=document.getElementById('np_desc').value; const promo=document.getElementById('np_promo').checked;
-  const varianText=document.getElementById('np_varian').value.trim();
-  if(!nama||!jual||!varianText){alert('Isi Nama, Harga Jual, dan Varian dulu'); return;}
-  const variants=varianText.split(',').map(s=>{const parts=s.split(':'); return [parts[0].trim(), (parts[1]||'').trim()];}).filter(v=>v[1]);
-  const p={name:nama, cat:cat, price:jual, old:old, modal:modal, promo:promo, variants:variants, desc:desc};
-  DATA.push(p);
-  const pi=DATA.length-1; variants.forEach((v,vi)=>{STOCK.push({pi:pi, vi:vi, produk:nama, varian:v[0], jumlah:10, masuk:new Date().toISOString().slice(0,10), keluar:''});});
-  saveAll(); renderAdmin(); renderCatalog(); alert('Produk berhasil ditambah!');
-}
-function editProduk(i){
-  const p=DATA[i]; const jual=prompt('Harga Jual baru untuk '+p.name, p.price); if(jual===null) return;
-  const modal=prompt('Harga Modal baru', p.modal||0); if(modal===null) return;
-  const old=prompt('Harga Coret (0 jika tidak promo)', p.old||0); if(old===null) return;
-  p.price=parseInt(jual)||p.price; p.modal=parseInt(modal)||p.modal; p.old=parseInt(old)||0; p.promo=p.old>0;
-  saveAll(); renderAdmin(); renderCatalog(); alert('Harga berhasil diubah!');
-}
-function toggleHidden(i){DATA[i].hidden=!DATA[i].hidden; saveAll(); renderAdmin(); renderCatalog();}
-function ubahStatus(id){
-  const o=ORDERS.find(x=>x.id===id); if(!o) return;
-  const sel=document.getElementById('st-'+id); const baru=sel.value; const lama=o.status;
-  if(baru==='Dibatalkan'){
-    const alasan=(document.getElementById('alasanInput-'+id)?.value||'').trim();
-    if(!alasan){alert('Isi Alasan Batal dulu'); return;}
-    o.alasan=alasan;
-    if(lama==='Selesai'){
-      const s=STOCK.find(x=>x.pi===o.pi && x.vi===o.vi); if(s) s.jumlah+=1;
-    }
-  }
-  if(baru==='Selesai' && lama!=='Selesai'){
-    const s=STOCK.find(x=>x.pi===o.pi && x.vi===o.vi); if(s){ if(s.jumlah>0) s.jumlah-=1; s.keluar=new Date().toISOString().slice(0,10); }
-  }
-  o.status=baru; saveAll(); renderAdmin();
-}
-function tambahStok(){
-  const pi=parseInt(document.getElementById('sm_produk').value); const vi=parseInt(document.getElementById('sm_varian').value); const jml=parseInt(document.getElementById('sm_jumlah').value||0); const tgl=document.getElementById('sm_tanggal').value;
-  const s=STOCK.find(x=>x.pi===pi && x.vi===vi);
-  if(s){s.jumlah+=jml; s.masuk=tgl; } else {STOCK.push({pi:pi, vi:vi, produk:DATA[pi].name, varian:DATA[pi].variants[vi][0], jumlah:jml, masuk:tgl, keluar:''});}
-  saveAll(); renderAdmin(); alert('Stok ditambah!');
-}
-renderCatalog();
 </script></body></html>
