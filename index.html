@@ -144,8 +144,8 @@ function shareProduk(pi){
   const idx=p.variants.findIndex(x=>x[0]===v); const fid=p.variants[idx>=0?idx:0][1];
   let text='Lihat nih! '+p.name+' - Pilihan: '+v+' - Harga: '+rp(p.price)+' di Amaya Fashion!\nJawa GRATIS ONGKIR, Luar Jawa cek ongkir dulu.\n\nFoto produk: '+thumb(fid);
   if(BUNDLE_SECOND[pi]){const fid2=BUNDLE_SECOND[pi][idx>=0?idx:0]||BUNDLE_SECOND[pi][0]; text+='\nFoto produk 2: '+thumb(fid2);}
-  text+='\n\nKatalog lengkap: https://amayafesyen.netlify.app\nOrder WA: https://wa.me/6282224437059';
-  if(navigator.share){navigator.share({title:'Amaya Fashion - '+p.name, text:text, url:'https://amayafesyen.netlify.app'}).catch(()=>{window.open('https://wa.me/?text='+encodeURIComponent(text),'_blank');});}
+  text+='\n\nKatalog lengkap: https://alkazar614.github.io/amaya-fashion/\nOrder WA: https://wa.me/6282224437059';
+  if(navigator.share){navigator.share({title:'Amaya Fashion - '+p.name, text:text, url:'https://alkazar614.github.io/amaya-fashion/'}).catch(()=>{window.open('https://wa.me/?text='+encodeURIComponent(text),'_blank');});}
   else{window.open('https://wa.me/?text='+encodeURIComponent(text),'_blank');}
 }
 function setCat(c,btn){cat=c; document.querySelectorAll('.filters button').forEach(b=>b.classList.remove('active')); btn.classList.add('active'); filter();}
