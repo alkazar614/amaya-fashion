@@ -55,6 +55,19 @@ function load(key, fallback){try{const v=localStorage.getItem(key);return v?JSON
 function save(key, val){localStorage.setItem(key, JSON.stringify(val));}
 let DATA = load('amaya_products', DEFAULT_PRODUCTS);
 let ORDERS = load('amaya_orders', []);
+// AUTO-MIGRASI: kalau ada produk baru di DEFAULT_PRODUCTS yang belum ada di DATA lama, tambahin otomatis
+try{
+  const _savedVer = parseInt(localStorage.getItem('amaya_data_version')||'0');
+  const _curVer = 2;
+  if(_savedVer !== _curVer){
+    const _names = new Set(DATA.map(p=>p.name));
+    let _added = 0;
+    DEFAULT_PRODUCTS.forEach(p=>{ if(!_names.has(p.name)){ DATA.push(JSON.parse(JSON.stringify(p))); _added++; } });
+    if(_added>0){ save('amaya_products', DATA); }
+    localStorage.setItem('amaya_data_version', String(_curVer));
+    console.log('Migrasi produk baru:', _added);
+  }
+}catch(e){ console.log('migrasi skip', e); }
 let STOCK = load('amaya_stock', null);
 if(!STOCK){
   STOCK=[];
@@ -65,6 +78,19 @@ if(!STOCK){
   });
   save('amaya_stock', STOCK);
 }
+// AUTO-MIGRASI STOK: tambahin stok 10 untuk produk baru yang belum ada di stok lama
+try{
+  let _changed = false;
+  DATA.forEach((p,pi)=>{
+    p.variants.forEach((v,vi)=>{
+      const _exists = STOCK.some(s=>s.produk===p.name && s.varian===v[0]);
+      if(!_exists){ STOCK.push({pi:pi, vi:vi, produk:p.name, varian:v[0], jumlah:10, masuk:new Date().toISOString().slice(0,10), keluar:''}); _changed=true; }
+    });
+  });
+  // Perbaiki pi/vi yang mungkin geser karena produk baru di akhir
+  DATA.forEach((p,pi)=>{ p.variants.forEach((v,vi)=>{ const s = STOCK.find(x=>x.produk===p.name && x.varian===v[0]); if(s){ s.pi=pi; s.vi=vi; } }); });
+  if(_changed){ save('amaya_stock', STOCK); }
+}catch(e){ console.log('migrasi stok skip', e); }
 function saveAll(){save('amaya_products', DATA); save('amaya_orders', ORDERS); save('amaya_stock', STOCK);}
 function rp(n){return 'Rp '+n.toLocaleString('id-ID');}
 function thumb(fid){return 'https://drive.google.com/thumbnail?id='+fid+'&sz=w1000';}
