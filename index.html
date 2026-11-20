@@ -1,4 +1,13 @@
 <!DOCTYPE html><html lang="id"><head>
+<link rel="manifest" href="manifest.json">
+<meta name="theme-color" content="#4A3A2E">
+<meta name="mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="default">
+<meta name="apple-mobile-web-app-title" content="Amaya Fashion">
+<link rel="apple-touch-icon" href="apple-touch-icon.png">
+<link rel="icon" type="image/png" href="icon-192.png">
+
 <!-- Google Analytics - Amaya Fashion -->
 <script async src="https://www.googletagmanager.com/gtag/js?id=G-07ZC9TBG6B"></script>
 <script>
@@ -46,7 +55,9 @@ table{width:100%;border-collapse:collapse;font-size:13px}th,td{padding:8px;borde
 .poster-btns button{flex:1;padding:13px;border-radius:12px;border:0;font-weight:800;cursor:pointer;font-size:15px}
 </style></head><body>
 <div id="katalogPage">
-<header><div class="top"><h1>Amaya <span>Fashion</span></h1><p class="sub">Katalog • Order via WA 0822-2443-7059 • Barang Bagus & Berkualitas • 37 Produk + 3 Bundle</p>
+<header>
+<img src="logo.png" alt="Amaya Fashion" style="height:44px;width:auto;border-radius:50%;vertical-align:middle">
+<div class="top"><h1>Amaya <span>Fashion</span></h1><p class="sub">Katalog • Order via WA 0822-2443-7059 • Barang Bagus & Berkualitas • 37 Produk + 3 Bundle</p>
 <div style="display:flex;gap:8px;align-items:center"><input class="search" id="search" placeholder="Cari produk... contoh: Daster, Tunik, Sarung, Mukena" oninput="filter()" onkeydown="if(event.key==='Enter'){event.preventDefault();checkAdmin();}"><button id="btnCari" onclick="checkAdmin()" style="flex-shrink:0;background:#4A3A2E;color:#fff;border:0;padding:12px 18px;border-radius:999px;font-weight:800;cursor:pointer;font-size:15px">Cari</button></div>
 <div class="filters" id="filters"><button class="active" onclick="setCat('Semua',this)">Semua</button><button onclick="setCat('Bundle Promo',this)">Bundle Promo</button><button onclick="setCat('Kemko Pria',this)">Kemko Pria</button><button onclick="setCat('Jaket Pria',this)">Jaket Pria</button><button onclick="setCat('Mukena',this)">Mukena</button><button onclick="setCat('Gamis Wanita',this)">Gamis Wanita</button><button onclick="setCat('Blouse Dewasa',this)">Blouse Dewasa</button><button onclick="setCat('Celana Wanita',this)">Celana Wanita</button><button onclick="setCat('Setelan Wanita',this)">Setelan Wanita</button><button onclick="setCat('Busana Anak',this)">Busana Anak</button><button onclick="setCat('Daster',this)">Daster</button><button onclick="setCat('Tunik',this)">Tunik</button><button onclick="setCat('Sarung',this)">Sarung</button></div></div></header>
 <main><div class="ongkirbar"><b>Info Ongkir:</b> Pulau Jawa <b>GRATIS ONGKIR</b>. Luar Jawa cek ongkir dulu, chat WA untuk konfirmasi.<a class="btn-ongkir" href="https://cek-ongkir.com/" target="_blank" rel="noopener">Cek Ongkir Luar Jawa → cek-ongkir.com</a><div style="font-size:12px;margin-top:8px;opacity:.8">Buka link, cek ongkir, screenshot hasilnya ke WA Amaya.</div></div>
@@ -416,4 +427,14 @@ async function sharePosterFile(){
   }
 }
 
-</script></body></html>
+</script><script>
+if ('serviceWorker' in navigator) {
+  window.addEventListener('load', function() {
+    navigator.serviceWorker.register('sw.js').then(function(reg){ console.log('Amaya SW OK', reg.scope); }).catch(function(err){ console.log('Amaya SW gagal', err); });
+  });
+}
+let _deferredPrompt = null;
+window.addEventListener('beforeinstallprompt', function(e){ e.preventDefault(); _deferredPrompt = e; const b = document.getElementById('btnInstallPWA'); if(b) b.style.display='flex'; });
+async function installPWA(){ if(_deferredPrompt){ _deferredPrompt.prompt(); const r = await _deferredPrompt.userChoice; _deferredPrompt = null; const b = document.getElementById('btnInstallPWA'); if(b) b.style.display='none'; } else { alert('Untuk install: di Chrome HP klik titik tiga di pojok kanan atas > Tambahkan ke Layar Utama / Install App'); } }
+</script>
+</body></html>
